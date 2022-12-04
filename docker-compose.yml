@@ -17,12 +17,12 @@ services:
           "-c",
           "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB",
         ]
-      interval: 10s
-      timeout: 5s
+      interval: 3s
+      timeout: 3s
       retries: 5
 
   app:
-    container_name: django_api_dev
+    container_name: django_delivery_api_dev
     build:
       context: .
       dockerfile: Dockerfile
