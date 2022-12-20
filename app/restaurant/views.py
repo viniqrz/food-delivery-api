@@ -1,33 +1,25 @@
 from rest_framework.generics import (
-    GenericAPIView,
-    CreateAPIView,
-    UpdateAPIView,
-    DestroyAPIView,
-    ListAPIView,
     RetrieveAPIView,
-    RetrieveUpdateDestroyAPIView,
     ListCreateAPIView,
-    mixins,
 )
 from rest_framework.views import APIView, Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
 from rest_framework import serializers
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from core.models import Restaurant
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.pagination import PageNumberPagination
-from user.views  import UserSerializer
+from user.views import UserSerializer
 
 
 class RestaurantSerializer(ModelSerializer):
     user = UserSerializer(read_only=True)
-    
+
     class Meta:
         model = Restaurant
-        fields = ['name', 'cnpj', 'description', 'user']
-        read_only_fields = ['user']
-        
+        fields = ['id', 'name', 'cnpj', 'description', 'user']
+        read_only_fields = ['user', 'id']
 
 
 class RestaurantsPagination(PageNumberPagination):
@@ -36,7 +28,7 @@ class RestaurantsPagination(PageNumberPagination):
     max_page_size = 50
 
 
-class ListRestaurantsApi(ListCreateAPIView):
+class ListCreateRestaurantsApi(ListCreateAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
     pagination_class = RestaurantsPagination
@@ -49,4 +41,6 @@ class ListRestaurantsApi(ListCreateAPIView):
 class RetrieveRestaurantApi(RetrieveAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = []
     lookup_field = 'id'
