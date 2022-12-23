@@ -31,7 +31,7 @@ class Order(Model):
                        default=StatusEnum.PENDING, max_length=64)
     delivery_method = CharField(
         choices=DeliveryMethodEnum.choices, max_length=64)
-    devivery_worker = ForeignKey(
+    delivery_worker = ForeignKey(
         to=User, null=True, on_delete=CASCADE, related_name='worker')
     created_at = DateTimeField(auto_now_add=True)
     delivered_at = DateTimeField(null=True)
